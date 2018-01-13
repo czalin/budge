@@ -1,0 +1,37 @@
+Database Schema:
+
+User = {
+	_id: hash,
+	Name: "string",
+	Email: "string",
+	Password: hash,
+	BudgetId: hash
+}
+
+Budget = {
+	_id: hash,
+	CategoryIds: [hashes],
+	BudgetRangeIds: [hashes]
+}
+
+Category = {
+	_id: hash,
+	Title: "string",
+	ImageURL: "string"
+}
+
+BudgetRange = {
+	_id: hash,
+	CategoryId: hash,
+	StartDate: date,
+	EndDate: date,
+	Amount: double
+}
+
+Expense = {
+	_id: hash,
+	CategoryId: hash,
+	Amount: double,
+	Date: date,
+	Description: "string"
+}
