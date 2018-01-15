@@ -10,22 +10,21 @@ User = {
 
 Budget = {
 	_id: hash,
-	CategoryIds: [hashes],
 	BudgetRangeIds: [hashes]
 }
 
 Category = {
 	_id: hash,
 	Title: "string",
-	ImageURL: "string"
+	ImageURL: "string",
+	Amount: double
 }
 
 BudgetRange = {
 	_id: hash,
-	CategoryId: hash,
+	CategoryIds: [hash],
 	StartDate: date,
-	EndDate: date,
-	Amount: double
+	EndDate: date
 }
 
 Expense = {
