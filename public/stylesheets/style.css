@@ -42,3 +42,39 @@ footer {
 #footerLinks a:hover {
 	font-weight: bold;
 }
+
+h1 {
+	font-family: masterofbreak;
+	font-size: 6vw;
+	font-weight: normal;
+	color: white;
+	margin: 0px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+h2 {
+	font-family: masterofbreak;
+	font-size: 3vw;
+	font-weight: normal;
+	color: white;
+	margin: 0px;
+	text-align: center;
+}
+
+h3 {
+	font-family: geosans;
+	font-size: 3vw;
+	font-weight: normal;
+	color: white;
+	margin: 0px;
+	text-align: center;
+}
+
+.verticalAlign {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+}
