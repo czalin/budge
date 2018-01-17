@@ -84,9 +84,11 @@ function buildExpenseView(expense) {
 		});
 		******************************************************************/
 
+		/********* REMOVE AFTER ROUTES BUILT ***********/
 		closeExpenseView();
 		getRemainders();
 		buildCategoryView();
+		/***********************************************/
 	});
 
 	// Handle deleting expense
@@ -94,9 +96,27 @@ function buildExpenseView(expense) {
 		// Delete the local expense data
 		budgeUser.currentRangeExpenses.splice(budgeUser.currentRangeExpenses.indexOf(expense),1);
 
+		/************** UNCOMMENT AFTER ROUTES BUILT **********************
+		// Request delete from database
+		$.ajax({
+			type: 'DELETE',
+			url: '/expenses/' + expense._id
+		}).done(function (response) {
+			// Check for delete error
+			if(response.msg.split(':')[0] === 'ERROR') {
+				alert(response.msg);
+			}
+			closeExpenseView();
+			getRemainders();
+			buildCategoryView();
+		});
+		******************************************************************/
+
+		/********* REMOVE AFTER ROUTES BUILT ***********/
 		closeExpenseView();
 		getRemainders();
 		buildCategoryView();
+		/***********************************************/
 	});
 
 	// Handle adding expense
