@@ -5,26 +5,28 @@
 ******************************************************************************/
 
 function buildExpenseView(expense) {
-
 	// Create overlay
 	var expenseWrapper = document.createElement('div');
 	expenseWrapper.id = 'expenseWrapper';
 	$('#wrapper').after(expenseWrapper);
 
+	// Get category options based on current range
 	var categoryOptions = '';
 	$.each(budgeUser.currentRangeCategories, function(index, cat) {
 		var selected = '';
 		if(expense.categoryId === cat._id) {
 			selected = ' selected';
 		}
-		categoryOptions += '<option value="' + cat.title + '"' + selected + '>' + cat.title + '</option>';
+		categoryOptions += '<option data-id="' + cat._id + '" value="' + cat.title + '"' + selected + '>' + cat.title + '</option>';
 	});
 
+	// Create submit string based on whether adding or updating expenses
 	var submitString = '';
 	if(expense._id) {
-		submitString = '<input type="submit" value="Update Expense" style="margin: 5px;">';
+		submitString = '<button id="btnUpdateExpense" type="button" style="margin: 5px;">Update Expense</button>' +
+					   '<button id="btnDeleteExpense" type="button" style="margin: 5px; color: red">Delete Expense</button>';
 	} else {
-		submitString = '<input type="submit" value="Add Expense" style="margin: 5px;">';
+		submitString = '<button id="btnAddExpense" type="button" style="margin: 5px;">Add Expense</button>';
 	}
 
 	// Render expense view
@@ -34,7 +36,7 @@ function buildExpenseView(expense) {
 				'<table style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%)">' +
 					'<tr>' +
 						'<td>' +
-							'<form style="text-align: center;">' +
+							'<form id="expenseForm" style="text-align: center;">' +
 								'<h2>Category</h2>' +
 								'<select name="category">' +
 									categoryOptions +
@@ -55,14 +57,105 @@ function buildExpenseView(expense) {
 		'</div>'
 	);
 
-	$('#closeExpenseView').on('click', function() {
-		$('#expenseWrapper').css('transition', 'all 1s');
+	// Handle updating expense
+	$('#btnUpdateExpense').click(function() {
+		// Update the local expense data with inputs
+		expense.categoryId = $('#expenseForm [name="category"] option:selected').data('id').toString();
+		expense.amount = parseFloat($('#expenseForm [name="amount"]').val());
+		expense.date = $('#expenseForm [name="date"]').val();
+		expense.description = $('#expenseForm [name="description"]').val();
+
+		/************** UNCOMMENT AFTER ROUTES BUILT **********************
+		// Put updates to database
+		$.ajax({
+			type: 'PUT',
+			data: expense,
+			url: '/expenses',
+			dataType: 'JSON'
+		}).done(function(response) {
+			// Check for post error
+			if(response.msg.split(':')[0] === 'ERROR') {
+				alert(response.msg);
+			} else {
+				getRemainders();
+			}
+			closeExpenseView();
+			buildCategoryView();
+		});
+		******************************************************************/
+
+		closeExpenseView();
+		getRemainders();
+		buildCategoryView();
+	});
+
+	// Handle deleting expense
+	$('#btnDeleteExpense').click(function() {
+		// Delete the local expense data
+		budgeUser.currentRangeExpenses.splice(budgeUser.currentRangeExpenses.indexOf(expense),1);
+
+		closeExpenseView();
+		getRemainders();
+		buildCategoryView();
+	});
+
+	// Handle adding expense
+	$('#btnAddExpense').click(function() {
+		// Update the expense data with inputs
+		expense.categoryId = $('#expenseForm [name="category"] option:selected').data('id').toString();
+		expense.amount = parseFloat($('#expenseForm [name="amount"]').val());
+		expense.date = $('#expenseForm [name="date"]').val();
+		expense.description = $('#expenseForm [name="description"]').val();
+
+		/************** UNCOMMENT AFTER ROUTES BUILT **********************
+		// Push to database and retrieve the new id
+		$.ajax({
+			type: 'POST',
+			data: expense,
+			url: '/expenses',
+			dataType: 'JSON'
+		}).done(function(response) {
+			// Check for post error
+			if(response.msg.split(':')[0] === 'ERROR') {
+				alert(response.msg);
+			} else {
+				// Update local copy
+				expense._id = response.msg.split(':')[1];
+				budgeUser.currentRangeExpenses.push(expense);
+				getRemainders();
+			}
+			closeExpenseView();
+			buildCategoryView();
+		});
+		******************************************************************/
+
+		/********* REMOVE AFTER ROUTES BUILT ***********/
+		// Test add
+		expense._id = staticExpenseId.toString();
+		staticExpenseId++;
+		// Add local copy
+		budgeUser.currentRangeExpenses.push(expense);
+
+		closeExpenseView();
+		getRemainders();
+		buildCategoryView();
+		/***********************************************/
+	});
+
+	// Handle cancelling of the form
+	$('#closeExpenseView').click(function() {
+		closeExpenseView();
+	});
+
+	function closeExpenseView() {
+		$('#expenseWrapper').css('transition', 'opacity 0.25s');
 		$('#expenseWrapper').css('opacity', '0');
 		setTimeout(function() {
 			$('#expenseWrapper').remove();
-		},1000);
-	});
+		},250);
+	}
 
+	// Set timeout to fade in view
 	setTimeout(function() {
 		$('#expenseWrapper').css('opacity', '1');
 	},0);

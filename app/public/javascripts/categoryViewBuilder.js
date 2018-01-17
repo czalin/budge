@@ -31,11 +31,10 @@ function buildCategoryView() {
 	var expenseRows = '';
 	$.each(budgeUser.currentRangeExpenses, function(index, expense) {
 		if(expense.categoryId === currentCategory._id) {
-			expenseRows += '<tr class="expenseRow" data-id=' + expense._id + '><td>' + expense.date + '</td><td>' + expense.description + '</td><td>' + expense.amount + '</td></tr>';
+			expenseRows += '<tr class="expenseRow" data-id=' + expense._id + '><td>' + expense.date + '</td><td>' + expense.description + '</td><td>$' + parseFloat(expense.amount).toFixed(2) + '</td></tr>';
 		}
-	})
+	});
 
-	// Render the view
 	$('#wrapper').html(
 		'<div style="position: relative; width: 100%; height: calc(100% - 75px);">' +
 			'<table class="verticalAlign">' +
@@ -107,13 +106,17 @@ function buildCategoryView() {
 		$(this).css('font-weight', 'bold');
 		$(this).css('color', 'black');
 		$(this).css('cursor', 'pointer');
+		$(this).css('transition', 'all 1s');
 		$(this).parent().css('background-color', 'white');
+		$(this).parent().css('transition', 'all 0.5s');
 	});
 
 	$('#addExpense').mouseout(function() {
 		$(this).css('font-weight', 'normal');
 		$(this).css('color', 'white');
+		$(this).css('transition', 'all 0.5s');
 		$(this).parent().css('background-color', 'transparent');
+		$(this).parent().css('transition', 'all 0.25s');
 	});
 
 	$('#addExpense').click(function() {

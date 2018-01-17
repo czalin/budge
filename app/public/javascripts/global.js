@@ -7,36 +7,42 @@ var budgeUser = {
 };
 
 // Static data for testing, delete once routes built //////////////////////////
+var staticCategoryId = 1;
+var staticExpenseId = 1;
 budgeUser.currentRangeCategories.push({
-	_id: '1',
+	_id: staticCategoryId.toString(),
 	title: 'Groceries',
 	imageURL: '/images/groceries-large.jpeg',
 	amount: 500.00
 });
+staticCategoryId++;
 
 budgeUser.currentRangeExpenses.push({
-	_id: '1',
+	_id: staticExpenseId.toString(),
 	categoryId: '1',
 	amount: 12.34,
 	date: '2018-01-15',
 	description: 'Trader Joe\'s Groceries'
 });
+staticExpenseId++;
 
 budgeUser.currentRangeExpenses.push({
-	_id: '2',
+	_id: staticExpenseId.toString(),
 	categoryId: '1',
 	amount: 56.78,
 	date: '2018-01-18',
 	description: 'HEB Groceries'
 });
+staticExpenseId++;
 
 budgeUser.currentRangeExpenses.push({
-	_id: '3',
+	_id: staticExpenseId.toString(),
 	categoryId: '1',
 	amount: 90.12,
 	date: '2018-01-25',
 	description: 'Target Beer Run'
 });
+staticExpenseId++;
 //////////////////////////////////////////////////////////////////////////////
 
 // DOM Ready ============================================================
