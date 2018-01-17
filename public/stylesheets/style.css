@@ -78,3 +78,45 @@ h3 {
 	top: 50%;
 	transform: translateY(-50%);
 }
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.1);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888; 
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+}
+
+#expenseWrapper {
+	opacity: 0;
+	position: absolute;
+	width: 100vw;
+	height: 100vh;
+	top: 0px;
+	left: 0px;
+	background-color: rgba(0,0,0,0.5);
+	transition: all 2s;
+}
+
+#innerExpenseView {
+	background-color: rgba(0,0,0,0.5);
+	border-radius: 25px;
+	border: 5px solid rgba(255,255,255,0.25);
+	width: 30vw;
+	height: 75vh;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}

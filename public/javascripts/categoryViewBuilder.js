@@ -31,7 +31,7 @@ function buildCategoryView() {
 	var expenseRows = '';
 	$.each(budgeUser.currentRangeExpenses, function(index, expense) {
 		if(expense.categoryId === currentCategory._id) {
-			expenseRows += '<tr><td>' + expense.date + '</td><td>' + expense.description + '</td><td>' + expense.amount + '</td></tr>';
+			expenseRows += '<tr class="expenseRow" data-id=' + expense._id + '><td>' + expense.date + '</td><td>' + expense.description + '</td><td>' + expense.amount + '</td></tr>';
 		}
 	})
 
@@ -40,7 +40,7 @@ function buildCategoryView() {
 		'<div style="position: relative; width: 100%; height: calc(100% - 75px);">' +
 			'<table class="verticalAlign">' +
 				'<tr>' +
-					'<td style="width: ' + ($(window).width()/3).toString() + 'px;">' +
+					'<td style="width: calc(100vw / 3);">' +
 						'<table>' +
 							'<tr>' +
 								'<td>' +
@@ -69,16 +69,24 @@ function buildCategoryView() {
 							'</tr>' +
 						'</table>' +
 					'</td>' +
-					'<td style="width: ' + ($(window).width()*2/3).toString() + 'px;">' +
-						'<div style="background-color: rgba(0,0,0,0.5); margin: 10px; border-radius: 10px">' +
-							'<table style="width: 100%; font-family: geosans; color: white; text-align: center">' +
-								'<tr>' +
-									'<th>Date</th>' +
-									'<th>Description</th>' +
-									'<th>Amount</th>' +
-								'</tr>' +
-								expenseRows +
-							'</table>' +
+					'<td style="width: calc(100vw * 2 / 3);">' +
+						'<div style="width: calc(100% - 30px); background-color: rgba(0,0,0,0.5); margin: 10px; padding: 5px; border-radius: 10px;">' +
+							'<div style="max-height: 80vh; overflow-y: scroll;">' +
+								'<table style="width: 100%; font-family: geosans; color: white; text-align: center;">' +
+									'<tr>' +
+										'<th>Date</th>' +
+										'<th>Description</th>' +
+										'<th>Amount</th>' +
+									'</tr>' +
+									expenseRows +
+									'<tr style="height: 10px;"></tr>' +
+									'<tr>' +
+										'<td></td>' +
+										'<td style="border-radius: 10px;"><h2 id="addExpense" style="font-size: 20pt">Add Expense</h2></td>' +
+										'<td></td>' +
+									'</tr>' +
+								'</table>' +
+							'</div>' +
 						'</div>' +
 					'</td>' +
 				'</tr>' +
@@ -90,4 +98,56 @@ function buildCategoryView() {
 
 	// Draw the circle
 	catCircles[0].draw();
+
+	/****************************** ADD EXPENSE ********************************
+	// Handle expense adding by building a new expense view with default values
+	***************************************************************************/
+
+	$('#addExpense').hover(function() {
+		$(this).css('font-weight', 'bold');
+		$(this).css('color', 'black');
+		$(this).css('cursor', 'pointer');
+		$(this).parent().css('background-color', 'white');
+	});
+
+	$('#addExpense').mouseout(function() {
+		$(this).css('font-weight', 'normal');
+		$(this).css('color', 'white');
+		$(this).parent().css('background-color', 'transparent');
+	});
+
+	$('#addExpense').click(function() {
+		var today = new Date();
+
+		var newExpense = {
+			categoryId: currentCategory._id,
+			amount: 0.00,
+			date: today.toISOString().split('T')[0],
+			description: ''
+		}
+
+		buildExpenseView(newExpense);
+	});
+
+	/**************************** UPDATE EXPENSE ******************************
+	- Handle expense updating by building a new expense view with the selected expense
+	***************************************************************************/
+
+	$('.expenseRow').hover(function() {
+		$(this).css('font-weight', 'bold');
+		$(this).css('cursor', 'pointer');
+	});
+
+	$('.expenseRow').mouseout(function() {
+		$(this).css('font-weight', 'normal');
+	});
+
+	$('.expenseRow').click(function() {
+		var expenseId = $(this).data('id').toString();
+		$.each(budgeUser.currentRangeExpenses, function(index, expense) {
+			if(expense._id === expenseId) {
+				buildExpenseView(expense);
+			}
+		});
+	});
 }
