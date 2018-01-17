@@ -1,0 +1,2 @@
+mongo < populate.js
+
