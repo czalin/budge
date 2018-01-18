@@ -1,12 +1,31 @@
 extends layout
 
 block content
-  #wrapper
-  footer
-    #footerLinks
-      a(href="#about") About
-      span  | 
-      a(href="#contact-us") Contact Us
-      span  | 
-      a(href="#terms-of-use") Terms of Use
-    span &copy Calin Scott, David Bowen, 2017
+	#cover
+		table(style='width: 100vw; height: 100vh; max-height: 100vh')
+			tr#pageHeader(style='height: 50px')
+				td
+					table#headerLinks(style="margin: auto;")
+						tr
+							td(style="padding-left: 5px; padding-right: 5px;")
+								a(href="#categories") Categories
+							td(style="padding-left: 5px; padding-right: 5px;")
+								span |
+							td(style="padding-left: 5px; padding-right: 5px; position: relative; width: 32px")
+								a(href="#budge")
+									img(src="/images/budge_icon.png" style="width: 32px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);")
+							td(style="padding-left: 5px; padding-right: 5px;")
+								span |
+							td(style="padding-left: 5px; padding-right: 5px;")
+								a(href="#sign-out") Sign Out
+			tr
+				td#wrapper(style='max-height: calc(100vh - 116px); overflow: hidden')
+			tr#pageFooter(style='height: 50px')
+				td
+					#footerLinks
+						a(href="#about") About
+						span  | 
+						a(href="#contact-us") Contact Us
+						span  | 
+						a(href="#terms-of-use") Terms of Use
+					span &copy Calin Scott, David Bowen, 2017

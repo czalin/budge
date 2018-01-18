@@ -80,14 +80,14 @@ function buildExpenseView(expense) {
 				getRemainders();
 			}
 			closeExpenseView();
-			buildCategoryView();
+			buildCategoryView(expense.categoryId);
 		});
 		******************************************************************/
 
 		/********* REMOVE AFTER ROUTES BUILT ***********/
 		closeExpenseView();
 		getRemainders();
-		buildCategoryView();
+		buildCategoryView(expense.categoryId);
 		/***********************************************/
 	});
 
@@ -108,14 +108,14 @@ function buildExpenseView(expense) {
 			}
 			closeExpenseView();
 			getRemainders();
-			buildCategoryView();
+			buildCategoryView(expense.categoryId);
 		});
 		******************************************************************/
 
 		/********* REMOVE AFTER ROUTES BUILT ***********/
 		closeExpenseView();
 		getRemainders();
-		buildCategoryView();
+		buildCategoryView(expense.categoryId);
 		/***********************************************/
 	});
 
@@ -145,7 +145,7 @@ function buildExpenseView(expense) {
 				getRemainders();
 			}
 			closeExpenseView();
-			buildCategoryView();
+			buildCategoryView(expense.categoryId);
 		});
 		******************************************************************/
 
@@ -158,7 +158,7 @@ function buildExpenseView(expense) {
 
 		closeExpenseView();
 		getRemainders();
-		buildCategoryView();
+		buildCategoryView(expense.categoryId);
 		/***********************************************/
 	});
 
