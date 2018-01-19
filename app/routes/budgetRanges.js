@@ -4,46 +4,42 @@ var ObjectId = require('mongodb').ObjectID;
 
 
 /* GET expenses. */
-router.get('/:budgetRangeID', function(req, res) {
+router.get('/:userId', function(req, res) {
 	var db = req.db;
 	var ranges = db.get('budgetRanges');
-	var expenses = db.get('expenses');
-	//ranges.find({"_id" : ObjectId(req.params.budgetRangeID)},{},function(e,range){
-    ranges.find({},{},function(e,range){
-        expenses.find({"date": {"$gte": range[0].startDate, "$lt": range[0].endDate}},{},function(e,docs){
-            res.json(docs);
-        });
+    ranges.find({"userId" : ObjectId(req.params.userId)},{},function(e,rangeArray){
+    	res.json(rangeArray);
     });
 });
 
-/* POST to addexpense */
+/* POST to add range */
 router.post('/', function(req, res) {
 	var db = req.db;
-	var expenses = db.get('expenses');
-	expenses.insert(req.body, function(err, newExpense) {
+    var ranges = db.get('budgetRanges');
+	ranges.insert(req.body, function(err, newRange) {
 		res.send(
-			(err === null) ? { msg: newExpense[0]._id } : { msg: err }
+			(err === null) ? { msg: newRange[0]._id } : { msg: err }
 		);
 	})
 });
 
-/* PUT to modexpense */
+/* PUT to mod range */
 router.put('/', function(req, res) {
     var db = req.db;
-    var expenses = db.get('expenses');
-    expenses.update(req.body, function(err, moddedExpense) {
+    var ranges = db.get('budgetRanges');
+    ranges.update(req.body, function(err, moddedRange) {
         res.send(
             (err === null) ? { msg: '' } : { msg: err }
         );
     })
 });
 
-/* DELETE to deleteuser */
+/* DELETE to delete range */
 router.delete('/:id', function(req, res) {
 	var db = req.db;
-	var expenses = db.get('expenses');
-	var expenseToDelete = req.params.id;
-	collection.remove({ '_id' : expenseToDelete }, function(err) {
+    var ranges = db.get('budgetRanges');
+    var rangeToDelete = ObjectId(req.params.id);
+	ranges.remove({ '_id' : rangeToDelete }, function(err) {
 		res.send((err === null) ? { msg: '' } : { msg: 'error: ' + err });
 	});
 });

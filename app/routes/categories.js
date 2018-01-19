@@ -4,25 +4,21 @@ var ObjectId = require('mongodb').ObjectID;
 
 
 /* GET categories. */
-router.get('/:budgetRangeID', function(req, res) {
+router.get('/:budgetRangeId', function(req, res) {
 	var db = req.db;
-	var rangesColl = db.get('budgetRanges');
 	var catColl = db.get('categories');
-	//ranges.find({"_id" : ObjectId(req.params.budgetRangeID)},{},function(e,range){
-    rangesColl.find({},{},function(e,range){
-        catColl.find({"date": {"$gte": range[0].startDate, "$lt": range[0].endDate}},{},function(e,docs){
-            res.json(docs);
-        });
+	catColl.find({"budgetRangeId" : ObjectId(req.params.budgetRangeId)},{},function(e,docs){
+		res.json(docs);
     });
 });
 
 /* POST to addexpense */
 router.post('/', function(req, res) {
 	var db = req.db;
-	var expenses = db.get('expenses');
-	expenses.insert(req.body, function(err, newExpense) {
+    var catColl = db.get('categories');
+	catColl.insert(req.body, function(err, newCategory) {
 		res.send(
-			(err === null) ? { msg: newExpense[0]._id } : { msg: err }
+			(err === null) ? { msg: newCategory[0]._id } : { msg: err }
 		);
 	})
 });
@@ -30,8 +26,8 @@ router.post('/', function(req, res) {
 /* PUT to modexpense */
 router.put('/', function(req, res) {
     var db = req.db;
-    var expenses = db.get('expenses');
-    expenses.update(req.body, function(err, moddedExpense) {
+    var catColl = db.get('categories');
+    catColl.update(req.body, function(err, moddedCategory) {
         res.send(
             (err === null) ? { msg: '' } : { msg: err }
         );
@@ -41,9 +37,9 @@ router.put('/', function(req, res) {
 /* DELETE to deleteuser */
 router.delete('/:id', function(req, res) {
 	var db = req.db;
-	var expenses = db.get('expenses');
-	var expenseToDelete = req.params.id;
-	collection.remove({ '_id' : expenseToDelete }, function(err) {
+    var catColl = db.get('categories');
+	var categoryToDelete = ObjectId(req.params.id);
+	cattColl.remove({ '_id' : categoryToDelete }, function(err) {
 		res.send((err === null) ? { msg: '' } : { msg: 'error: ' + err });
 	});
 });

@@ -4,11 +4,10 @@ var ObjectId = require('mongodb').ObjectID;
 
 
 /* GET expenses. */
-router.get('/:budgetRangeID', function(req, res) {
+router.get('/:budgetRangeId', function(req, res) {
 	var db = req.db;
 	var rangesColl = db.get('budgetRanges');
 	var expensesColl = db.get('expenses');
-	//ranges.find({"_id" : ObjectId(req.params.budgetRangeID)},{},function(e,range){
     rangesColl.find({},{},function(e,range){
         expensesColl.find({"date": {"$gte": range[0].startDate, "$lt": range[0].endDate}},{},function(e,docs){
             res.json(docs);
@@ -42,7 +41,7 @@ router.put('/', function(req, res) {
 router.delete('/:id', function(req, res) {
 	var db = req.db;
 	var expensesColl = db.get('expenses');
-	var expenseToDelete = req.params.id;
+	var expenseToDelete = ObjectId(req.params.id);
 	expensesColl.remove({ '_id' : expenseToDelete }, function(err) {
 		res.send((err === null) ? { msg: '' } : { msg: 'error: ' + err });
 	});

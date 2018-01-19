@@ -24,8 +24,8 @@ router.post('/', function(req, res) {
 /* PUT user */
 router.put('/', function(req, res) {
     var db = req.db;
-    var userColl = db.get('expenses');
-    userColl.update(req.body, function(err, moddedExpense) {
+    var userColl = db.get('userlist');
+    userColl.update(req.body, function(err, moddedUser) {
         res.send(
             (err === null) ? { msg: '' } : { msg: err }
         );
