@@ -209,3 +209,10 @@ function getRemainders() {
 		}
 	});
 }
+
+/************************* FUNCTION: makeSafe ******************************
+- Takes a string and makes it safe for HTML
+***************************************************************************/
+function makeSafe(unsafe) {
+    return String(unsafe).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
