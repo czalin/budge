@@ -16,18 +16,13 @@ function buildCategoryView(currentCategoryId) {
 		}
 	});
 
+	var catCircle;
+
 	// Update the background image based on the current category
 	$('body').css('background-image', 'url(' + currentCategory.imageURL + ')');
 
-	// Get all expenses for current category
-	var expenseRows = '';
-	$.each(budgeUser.currentRangeExpenses, function(index, expense) {
-		if(expense.categoryId === currentCategory._id) {
-			expenseRows += '<tr class="expenseRow" data-id=' + expense._id + '><td>' + expense.date + '</td><td>' + expense.description + '</td><td>$' + parseFloat(expense.amount).toFixed(2) + '</td></tr>';
-		}
-	});
-
 	// Initialize the view type
+	/*
 	var isLandscape = true;
 	var catCircle;
 	if($(window).width() > $(window).height()) {
@@ -38,13 +33,111 @@ function buildCategoryView(currentCategoryId) {
 		renderPortrait();
 		isLandscape = false;
 	}
+	*/
 
+	// Create the base table for the view
+	var categoryViewTable = document.createElement('table');
+	categoryViewTable.insertRow(0).id = 'categoryViewRow';
+	categoryViewTable.style.margin = 'auto';
+	categoryViewTable.style.height = '100%';
+	$('#wrapper').append(categoryViewTable);
+
+	// Set up the visualizer
+	var visualizerCell = document.createElement('td');
+	visualizerCell.id = 'visualizerCell';
+
+	$('#categoryViewRow').append(visualizerCell);
+	updateVisualizerCell();
+
+	/*********** FUNCTION updateVisualizerCell *************
+	- Updates the left side of the view (or full view if in
+	  portrait mode) any time expenses are changed
+	*******************************************************/
+
+	function updateVisualizerCell() {
+		visualizerCell.innerHTML = 
+			'<table style="height: 100%; margin: auto">' +
+				'<tr id="remainingRow" style="height: 0px">' +
+					'<td>' +
+						'<table style="width: 100%">' +
+							'<tr style="height: 100%">' +
+								'<td><h2>Remaining</h2></td>' +
+								'<td><h3> | </h3></td>' +
+								'<td><h3>$' + currentCategory.remainder.toFixed(2).toString() + '</h3></td>' +
+							'</tr>' +
+						'</table>' +
+					'</td>' +
+				'</tr>' +
+				'<tr>' +
+					'<td id="circleCell"></td>' +
+				'</tr>' +
+				'<tr id="budgetRow" style="height: 0px">' +
+					'<td>' +
+						'<table style="width: 100%">' +
+							'<tr>' +
+								'<td><h2>Budget</h2></td>' +
+								'<td><h3> | </h3></td>' +
+								'<td><h3>$' + currentCategory.amount.toFixed(2).toString() + '</h3></td>' +
+							'</tr>' +
+						'</table>' +
+					'</td>' +
+				'</tr>' +
+			'</table>';
+
+		catCircle = new BudgeCircle(currentCategory, $(window).width()/7);
+		// Add the circle container to the screen
+		$('#circleCell').append(catCircle.container);
+	}
+
+	// Set up the expense table
+	var expenseTableCell = document.createElement('td');
+	expenseTableCell.id = 'expenseTableCell';
+	expenseTableCell.style.width = 'calc(100vw * 2 / 3)';
+	updateExpenseTableCell();
+
+	/*********** FUNCTION updateExpenseTableCell ***********
+	- Updates the right side of the view (if in landscape
+	  mode) any time expenses are changed
+	********************************************************/
+
+	function updateExpenseTableCell() {
+		// Get all expenses for current category
+		var expenseRows = '';
+		$.each(budgeUser.currentRangeExpenses, function(index, expense) {
+			if(expense.categoryId === currentCategory._id) {
+				expenseRows += '<tr class="expenseRow" data-id=' + expense._id + '><td>' + expense.date + '</td><td>' + expense.description + '</td><td>$' + parseFloat(expense.amount).toFixed(2) + '</td></tr>';
+			}
+		});
+
+		expenseTableCell.innerHTML =
+			'<div style="width: calc(100% - 30px); background-color: rgba(0,0,0,0.5); margin: 10px; padding: 5px; border-radius: 10px;">' +
+				'<div style="max-height: 60vh; overflow-y: scroll;">' +
+					'<table style="width: 100%; font-family: geosans; color: white; text-align: center;">' +
+						'<tr>' +
+							'<th>Date</th>' +
+							'<th>Description</th>' +
+							'<th>Amount</th>' +
+						'</tr>' +
+						expenseRows +
+					'</table>' +
+				'</div>' +
+				'<hr style="width: 90%; height: 2px; border: none; background-color: white;">' +
+				'<table style="width: 100%; text-align: center;">' +
+					'<tr>' +
+						'<td style="border-radius: 10px;"><h2 id="addExpense" style="font-size: 20pt; line-height: normal">Add Expense</h2></td>' +
+						'<td style="border-radius: 10px;"><h2 id="addMultiple" style="font-size: 20pt; line-height: normal">Add Multiple</h2></td>' +
+					'</tr>' +
+				'</table>' +
+			'</div>';
+	}
+
+	
 	function renderLandscape() {
 		$('#wrapper').html(
-			'<table style="height: 100%">' +
+			'<table style="height: 100%; margin: auto;">' +
 				'<tr>' +
-					'<td style="width: calc(100vw / 3);">' +
-						'<table>' +
+					'<td>' +
+						'<table style="margin: auto;">' +
 							'<tr id="remainingRow">' +
 								'<td>' +
 									'<table style="width: 100%">' +
@@ -74,7 +167,7 @@ function buildCategoryView(currentCategoryId) {
 					'</td>' +
 					'<td style="width: calc(100vw * 2 / 3);">' +
 						'<div style="width: calc(100% - 30px); background-color: rgba(0,0,0,0.5); margin: 10px; padding: 5px; border-radius: 10px;">' +
-							'<div style="max-height: 80vh; overflow-y: scroll;">' +
+							'<div style="max-height: 60vh; overflow-y: scroll;">' +
 								'<table style="width: 100%; font-family: geosans; color: white; text-align: center;">' +
 									'<tr>' +
 										'<th>Date</th>' +
@@ -82,14 +175,15 @@ function buildCategoryView(currentCategoryId) {
 										'<th>Amount</th>' +
 									'</tr>' +
 									expenseRows +
-									'<tr style="height: 10px;"></tr>' +
-									'<tr>' +
-										'<td></td>' +
-										'<td style="border-radius: 10px;"><h2 id="addExpense" style="font-size: 20pt; line-height: normal">Add Expense</h2></td>' +
-										'<td></td>' +
-									'</tr>' +
 								'</table>' +
 							'</div>' +
+							'<hr style="width: 90%; height: 2px; border: none; background-color: white;">' +
+							'<table style="width: 100%; text-align: center;">' +
+								'<tr>' +
+									'<td style="border-radius: 10px;"><h2 id="addExpense" style="font-size: 20pt; line-height: normal">Add Expense</h2></td>' +
+									'<td style="border-radius: 10px;"><h2 id="addMultiple" style="font-size: 20pt; line-height: normal">Add Multiple</h2></td>' +
+								'</tr>' +
+							'</table>' +
 						'</div>' +
 					'</td>' +
 				'</tr>' +
@@ -103,20 +197,27 @@ function buildCategoryView(currentCategoryId) {
 		// Handle expense adding by building a new expense view with default values
 		***************************************************************************/
 
-		$('#addExpense').hover(function() {
+		$('#addExpense').hover(hoverCell);
+		$('#addMultiple').hover(hoverCell);
+
+		$('#addExpense').mouseout(mouseOutCell);
+		$('#addMultiple').mouseout(mouseOutCell);
+
+		function hoverCell() {
 			$(this).css('color', 'black');
 			$(this).css('cursor', 'pointer');
 			$(this).css('transition', 'all 1s');
 			$(this).parent().css('background-color', 'white');
 			$(this).parent().css('transition', 'all 0.5s');
-		});
+		}
 
-		$('#addExpense').mouseout(function() {
+		function mouseOutCell() {
 			$(this).css('color', 'white');
 			$(this).css('transition', 'all 0.5s');
 			$(this).parent().css('background-color', 'transparent');
 			$(this).parent().css('transition', 'all 0.25s');
-		});
+		}
+
 
 		$('#addExpense').click(function() {
 			var today = new Date();
@@ -156,7 +257,7 @@ function buildCategoryView(currentCategoryId) {
 		/************************* SWITCH CATEGORIES **********************************
 		- Handle switching categories when clicking on the circle
 		*******************************************************************************/
-		
+
 		$('#circleCell').click(function() {
 			var nextCatIndex = budgeUser.currentRangeCategories.indexOf(currentCategory) + 1;
 			if(nextCatIndex >= budgeUser.currentRangeCategories.length) {
@@ -168,28 +269,34 @@ function buildCategoryView(currentCategoryId) {
 
 	function renderPortrait() {
 		$('#wrapper').html(
-			'<table style="height: 100%; margin: auto">' +
-				'<tr id="remainingRow" style="height: 0px">' +
-					'<td>' +
-						'<table style="width: 100%">' +
-							'<tr style="height: 100%">' +
-								'<td><h2>Remaining</h2></td>' +
-								'<td><h3> | </h3></td>' +
-								'<td><h3>$' + currentCategory.remainder.toFixed(2).toString() + '</h3></td>' +
-							'</tr>' +
-						'</table>' +
-					'</td>' +
-				'</tr>' +
+			'<table style="height: 100%; margin: auto;">' +
 				'<tr>' +
-					'<td id="circleCell"></td>' +
-				'</tr>' +
-				'<tr id="budgetRow" style="height: 0px">' +
-					'<td>' +
-						'<table style="width: 100%">' +
+					'<td id="visualizerCell">' +
+						'<table style="height: 100%; margin: auto">' +
+							'<tr id="remainingRow" style="height: 0px">' +
+								'<td>' +
+									'<table style="width: 100%">' +
+										'<tr style="height: 100%">' +
+											'<td><h2>Remaining</h2></td>' +
+											'<td><h3> | </h3></td>' +
+											'<td><h3>$' + currentCategory.remainder.toFixed(2).toString() + '</h3></td>' +
+										'</tr>' +
+									'</table>' +
+								'</td>' +
+							'</tr>' +
 							'<tr>' +
-								'<td><h2>Budget</h2></td>' +
-								'<td><h3> | </h3></td>' +
-								'<td><h3>$' + currentCategory.amount.toFixed(2).toString() + '</h3></td>' +
+								'<td id="circleCell"></td>' +
+							'</tr>' +
+							'<tr id="budgetRow" style="height: 0px">' +
+								'<td>' +
+									'<table style="width: 100%">' +
+										'<tr>' +
+											'<td><h2>Budget</h2></td>' +
+											'<td><h3> | </h3></td>' +
+											'<td><h3>$' + currentCategory.amount.toFixed(2).toString() + '</h3></td>' +
+										'</tr>' +
+									'</table>' +
+								'</td>' +
 							'</tr>' +
 						'</table>' +
 					'</td>' +
