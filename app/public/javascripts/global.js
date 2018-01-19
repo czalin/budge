@@ -17,6 +17,14 @@ budgeUser.currentRangeCategories.push({
 });
 staticCategoryId++;
 
+budgeUser.currentRangeCategories.push({
+	_id: staticCategoryId.toString(),
+	title: 'Restaurants',
+	imageURL: '/images/restaurants-large.jpeg',
+	amount: 300.00
+});
+staticCategoryId++;
+
 budgeUser.currentRangeExpenses.push({
 	_id: staticExpenseId.toString(),
 	categoryId: '1',
@@ -43,6 +51,15 @@ budgeUser.currentRangeExpenses.push({
 	description: 'Target Beer Run'
 });
 staticExpenseId++;
+
+budgeUser.currentRangeExpenses.push({
+	_id: staticExpenseId.toString(),
+	categoryId: '2',
+	amount: 78.12,
+	date: '2018-01-27',
+	description: 'Fancy Pants Cuisine'
+});
+staticExpenseId++;
 //////////////////////////////////////////////////////////////////////////////
 
 // DOM Ready ============================================================
@@ -64,7 +81,7 @@ $(document).ready(function() {
 	getRemainders();
 
 	// Build initial view
-	buildCategoryView();
+	buildCategoryView(budgeUser.currentRangeCategories[0]._id);
 });
 
 // GLOBAL OBJECTS AND FUNCTIONS ========================================
@@ -87,6 +104,7 @@ function BudgeCircle(category, radius) {
 	this.container.style.width = (this.radius*2).toString() + 'px';
 	this.container.style.height = (this.radius*2).toString() + 'px';
 	this.container.style.position = 'relative';
+	this.container.style.margin = 'auto';
 
 	// Create canvas element and add to container
 	this.canvas = document.createElement('canvas');

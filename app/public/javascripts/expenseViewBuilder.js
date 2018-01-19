@@ -80,14 +80,16 @@ function buildExpenseView(expense) {
 				getRemainders();
 			}
 			closeExpenseView();
-			buildCategoryView();
+			buildCategoryView.updateExpenseTableCell();
+			buildCategoryView.updateVisualizerCell();
 		});
 		******************************************************************/
 
 		/********* REMOVE AFTER ROUTES BUILT ***********/
 		closeExpenseView();
 		getRemainders();
-		buildCategoryView();
+		buildCategoryView.updateExpenseTableCell();
+		buildCategoryView.updateVisualizerCell();
 		/***********************************************/
 	});
 
@@ -108,14 +110,16 @@ function buildExpenseView(expense) {
 			}
 			closeExpenseView();
 			getRemainders();
-			buildCategoryView();
+			buildCategoryView.updateExpenseTableCell();
+			buildCategoryView.updateVisualizerCell();
 		});
 		******************************************************************/
 
 		/********* REMOVE AFTER ROUTES BUILT ***********/
 		closeExpenseView();
 		getRemainders();
-		buildCategoryView();
+		buildCategoryView.updateExpenseTableCell();
+		buildCategoryView.updateVisualizerCell();
 		/***********************************************/
 	});
 
@@ -145,7 +149,8 @@ function buildExpenseView(expense) {
 				getRemainders();
 			}
 			closeExpenseView();
-			buildCategoryView();
+			buildCategoryView.updateExpenseTableCell();
+			buildCategoryView.updateVisualizerCell();
 		});
 		******************************************************************/
 
@@ -158,7 +163,8 @@ function buildExpenseView(expense) {
 
 		closeExpenseView();
 		getRemainders();
-		buildCategoryView();
+		buildCategoryView.updateExpenseTableCell();
+		buildCategoryView.updateVisualizerCell();
 		/***********************************************/
 	});
 
