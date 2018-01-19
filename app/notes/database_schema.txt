@@ -2,35 +2,35 @@ Database Schema:
 
 User = {
 	_id: hash,
-	Name: "string",
-	Email: "string",
-	Password: hash,
-	BudgetId: hash
+	name: "string",
+	email: "string",
+	password: hash,
+	budgetId: hash
 }
 
 Budget = {
 	_id: hash,
-	BudgetRangeIds: [hashes]
+	budgetRangeIds: [hashes]
 }
 
 Category = {
 	_id: hash,
-	Title: "string",
-	ImageURL: "string",
-	Amount: double
+	title: "string",
+	imageURL: "string",
+	amount: double
 }
 
 BudgetRange = {
 	_id: hash,
-	CategoryIds: [hash],
-	StartDate: date,
-	EndDate: date
+	categoryIds: [hash],
+	startDate: date,
+	endDate: date
 }
 
 Expense = {
 	_id: hash,
-	CategoryId: hash,
-	Amount: double,
-	Date: date,
-	Description: "string"
+	categoryId: hash,
+	amount: double,
+	date: date,
+	description: "string"
 }
