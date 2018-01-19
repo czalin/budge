@@ -1,32 +1,43 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET userlist. */
-router.get('/userlist', function(req, res) {
+/* GET user. */
+router.get('/', function(req, res) {
 	var db = req.db;
-	var collection = db.get('userlist');
-	collection.find({},{},function(e,docs){
+	var userColl = db.get('userlist');
+	userColl.find({},{},function(e,docs){
 		res.json(docs);
 	});
 });
 
-/* POST to adduser */
-router.post('/adduser', function(req, res) {
+/* POST user */
+router.post('/', function(req, res) {
 	var db = req.db;
-	var collection = db.get('userlist');
-	collection.insert(req.body, function(err, result) {
+	var userColl = db.get('userlist');
+    userColl.insert(req.body, function(err, result) {
 		res.send(
 			(err === null) ? { msg: '' } : { msg: err }
 		);
 	})
 });
 
-/* DELETE to deleteuser */
-router.delete('/deleteuser/:id', function(req, res) {
+/* PUT user */
+router.put('/', function(req, res) {
+    var db = req.db;
+    var userColl = db.get('expenses');
+    userColl.update(req.body, function(err, moddedExpense) {
+        res.send(
+            (err === null) ? { msg: '' } : { msg: err }
+        );
+    })
+});
+
+/* DELETE user */
+router.delete('/:id', function(req, res) {
 	var db = req.db;
-	var collection = db.get('userlist');
+	var userColl = db.get('userlist');
 	var userToDelete = req.params.id;
-	collection.remove({ '_id' : userToDelete }, function(err) {
+    userColl.remove({ '_id' : userToDelete }, function(err) {
 		res.send((err === null) ? { msg: '' } : { msg: 'error: ' + err });
 	});
 });

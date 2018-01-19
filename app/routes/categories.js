@@ -3,14 +3,14 @@ var router = express.Router();
 var ObjectId = require('mongodb').ObjectID;
 
 
-/* GET expenses. */
+/* GET categories. */
 router.get('/:budgetRangeID', function(req, res) {
 	var db = req.db;
-	var ranges = db.get('budgetRanges');
-	var expenses = db.get('expenses');
+	var rangesColl = db.get('budgetRanges');
+	var catColl = db.get('categories');
 	//ranges.find({"_id" : ObjectId(req.params.budgetRangeID)},{},function(e,range){
-    ranges.find({},{},function(e,range){
-        expenses.find({"date": {"$gte": range[0].startDate, "$lt": range[0].endDate}},{},function(e,docs){
+    rangesColl.find({},{},function(e,range){
+        catColl.find({"date": {"$gte": range[0].startDate, "$lt": range[0].endDate}},{},function(e,docs){
             res.json(docs);
         });
     });

@@ -8,10 +8,14 @@ var bodyParser = require('body-parser');
 // Database
 var mongo = require('mongodb');
 var monk = require('monk');
-var db = monk('localhost:27017/');
+var db = monk('mongo:27017/test');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+var budgetRanges = require('./routes/budgetRanges');
+var categories = require('./routes/categories');
+var expenses = require('./routes/expenses');
+
 
 var app = express();
 
@@ -35,6 +39,10 @@ app.use(function(req,res,next) {
 
 app.use('/', index);
 app.use('/users', users);
+app.use('/budgetRanges', budgetRanges);
+app.use('/categories', categories);
+app.use('/expenses', expenses);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
