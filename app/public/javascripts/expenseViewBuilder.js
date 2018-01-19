@@ -59,38 +59,43 @@ function buildExpenseView(expense) {
 
 	// Handle updating expense
 	$('#btnUpdateExpense').click(function() {
-		// Update the local expense data with inputs
-		expense.categoryId = $('#expenseForm [name="category"] option:selected').data('id').toString();
-		expense.amount = parseFloat($('#expenseForm [name="amount"]').val());
-		expense.date = $('#expenseForm [name="date"]').val();
-		expense.description = $('#expenseForm [name="description"]').val();
+		var validity = validateInput();
+		if(validity === 'valid') {
+			// Update the local expense data with inputs
+			expense.categoryId = $('#expenseForm [name="category"] option:selected').data('id').toString();
+			expense.amount = parseFloat($('#expenseForm [name="amount"]').val());
+			expense.date = $('#expenseForm [name="date"]').val();
+			expense.description = makeSafe($('#expenseForm [name="description"]').val());
 
-		/************** UNCOMMENT AFTER ROUTES BUILT **********************
-		// Put updates to database
-		$.ajax({
-			type: 'PUT',
-			data: expense,
-			url: '/expenses',
-			dataType: 'JSON'
-		}).done(function(response) {
-			// Check for post error
-			if(response.msg.split(':')[0] === 'ERROR') {
-				alert(response.msg);
-			} else {
-				getRemainders();
-			}
+			/************** UNCOMMENT AFTER ROUTES BUILT **********************
+			// Put updates to database
+			$.ajax({
+				type: 'PUT',
+				data: expense,
+				url: '/expenses',
+				dataType: 'JSON'
+			}).done(function(response) {
+				// Check for post error
+				if(response.msg.split(':')[0] === 'ERROR') {
+					alert(response.msg);
+				} else {
+					getRemainders();
+				}
+				closeExpenseView();
+				buildCategoryView.updateExpenseTableCell();
+				buildCategoryView.updateVisualizerCell();
+			});
+			******************************************************************/
+
+			/********* REMOVE AFTER ROUTES BUILT ***********/
 			closeExpenseView();
+			getRemainders();
 			buildCategoryView.updateExpenseTableCell();
 			buildCategoryView.updateVisualizerCell();
-		});
-		******************************************************************/
-
-		/********* REMOVE AFTER ROUTES BUILT ***********/
-		closeExpenseView();
-		getRemainders();
-		buildCategoryView.updateExpenseTableCell();
-		buildCategoryView.updateVisualizerCell();
-		/***********************************************/
+			/***********************************************/
+		} else {
+			alert(validity);
+		}
 	});
 
 	// Handle deleting expense
@@ -125,47 +130,52 @@ function buildExpenseView(expense) {
 
 	// Handle adding expense
 	$('#btnAddExpense').click(function() {
-		// Update the expense data with inputs
-		expense.categoryId = $('#expenseForm [name="category"] option:selected').data('id').toString();
-		expense.amount = parseFloat($('#expenseForm [name="amount"]').val());
-		expense.date = $('#expenseForm [name="date"]').val();
-		expense.description = $('#expenseForm [name="description"]').val();
+		var validity = validateInput();
+		if(validity === 'valid') {
+			// Update the expense data with inputs
+			expense.categoryId = $('#expenseForm [name="category"] option:selected').data('id').toString();
+			expense.amount = parseFloat($('#expenseForm [name="amount"]').val());
+			expense.date = $('#expenseForm [name="date"]').val();
+			expense.description = makeSafe($('#expenseForm [name="description"]').val());
 
-		/************** UNCOMMENT AFTER ROUTES BUILT **********************
-		// Push to database and retrieve the new id
-		$.ajax({
-			type: 'POST',
-			data: expense,
-			url: '/expenses',
-			dataType: 'JSON'
-		}).done(function(response) {
-			// Check for post error
-			if(response.msg.split(':')[0] === 'ERROR') {
-				alert(response.msg);
-			} else {
-				// Update local copy
-				expense._id = response.msg.split(':')[1];
-				budgeUser.currentRangeExpenses.push(expense);
-				getRemainders();
-			}
+			/************** UNCOMMENT AFTER ROUTES BUILT **********************
+			// Push to database and retrieve the new id
+			$.ajax({
+				type: 'POST',
+				data: expense,
+				url: '/expenses',
+				dataType: 'JSON'
+			}).done(function(response) {
+				// Check for post error
+				if(response.msg.split(':')[0] === 'ERROR') {
+					alert(response.msg);
+				} else {
+					// Update local copy
+					expense._id = response.msg.split(':')[1];
+					budgeUser.currentRangeExpenses.push(expense);
+					getRemainders();
+				}
+				closeExpenseView();
+				buildCategoryView.updateExpenseTableCell();
+				buildCategoryView.updateVisualizerCell();
+			});
+			******************************************************************/
+
+			/********* REMOVE AFTER ROUTES BUILT ***********/
+			// Test add
+			expense._id = staticExpenseId.toString();
+			staticExpenseId++;
+			// Add local copy
+			budgeUser.currentRangeExpenses.push(expense);
+
 			closeExpenseView();
+			getRemainders();
 			buildCategoryView.updateExpenseTableCell();
 			buildCategoryView.updateVisualizerCell();
-		});
-		******************************************************************/
-
-		/********* REMOVE AFTER ROUTES BUILT ***********/
-		// Test add
-		expense._id = staticExpenseId.toString();
-		staticExpenseId++;
-		// Add local copy
-		budgeUser.currentRangeExpenses.push(expense);
-
-		closeExpenseView();
-		getRemainders();
-		buildCategoryView.updateExpenseTableCell();
-		buildCategoryView.updateVisualizerCell();
-		/***********************************************/
+			/***********************************************/
+		} else {
+			alert(validity);
+		}
 	});
 
 	// Handle cancelling of the form
@@ -179,6 +189,15 @@ function buildExpenseView(expense) {
 		setTimeout(function() {
 			$('#expenseWrapper').remove();
 		},250);
+	}
+
+	// Handle input validation
+	function validateInput() {
+		if(!parseFloat($('#expenseForm [name="amount"]').val())) {
+			return 'Amount format incorrect. Please enter a dollar amount (# or #.##).';
+		} else {
+			return 'valid';
+		}
 	}
 
 	// Set timeout to fade in view
