@@ -103,9 +103,11 @@ td {
 }
 
 #cover {
+	position: absolute;
 	background-color: rgba(0,0,0,0.5);
 	width: 100%;
 	height: 100%;
+	z-index: -2;
 }
 
 #pageFooter, #pageHeader {
@@ -114,13 +116,13 @@ td {
 	color: white;
 }
 
-#footerLinks a, #headerLinks a {
+a {
 	font-family: geosans;
 	color: white;
 	text-decoration: none;
 }
 
-#footerLinks a:hover, #headerLinks a:hover {
+a:hover {
 	font-weight: bold;
 }
 
@@ -129,6 +131,9 @@ h1 {
 	font-weight: normal;
 	color: white;
 	margin: 0px;
+}
+
+.centerElement {
 	position: absolute;
 	top: 50%;
 	left: 50%;
@@ -210,4 +215,12 @@ h3 {
 #viewToggle:hover {
 	background-image: url(/images/glance_icon_black.png);
 	cursor: pointer;
+}
+
+.loginBox {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
 }

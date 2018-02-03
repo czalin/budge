@@ -8,6 +8,8 @@ var budgeUser = {
 
 // DOM Ready ============================================================
 $(document).ready(function() {
+	buildLoginView();
+	/*
 	// Get budget ranges for current user
 	$.getJSON('/budgetRanges/' + budgeUser.userId, function(data) {
 		budgeUser.budgetRanges = data;
@@ -31,6 +33,7 @@ $(document).ready(function() {
 			});
 		});
 	});
+	*/
 });
 
 // GLOBAL OBJECTS AND FUNCTIONS ========================================
@@ -63,10 +66,13 @@ function BudgeCircle(category, radius) {
 	this.canvas.style.height = this.canvas.height;
 	this.container.appendChild(this.canvas);
 
-	// Create title element and add to container
-	this.titleElement = document.createElement('h1');
-	this.titleElement.innerHTML = this.title;
-	this.container.appendChild(this.titleElement);
+	// Create title element and add to container if a title exists
+	if(this.title) {
+		this.titleElement = document.createElement('h1');
+		this.titleElement.innerHTML = this.title;
+		this.titleElement.class = 'centerElement';
+		this.container.appendChild(this.titleElement);
+	}
 
 	// Manage the canvas art
 	this.draw = function() {
