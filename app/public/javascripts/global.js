@@ -1,87 +1,36 @@
 // GLOBAL VARIABLES =====================================================
 var budgeUser = {
-	userId: '1',
+	userId: '5a75c943fb31e1c4cfc31592',
 	budgetRanges: [],
 	currentRangeExpenses: [],
 	currentRangeCategories: []
 };
 
-// Static data for testing, delete once routes built //////////////////////////
-var staticCategoryId = 1;
-var staticExpenseId = 1;
-budgeUser.currentRangeCategories.push({
-	_id: staticCategoryId.toString(),
-	title: 'Groceries',
-	imageURL: '/images/groceries-large.jpeg',
-	amount: 500.00
-});
-staticCategoryId++;
-
-budgeUser.currentRangeCategories.push({
-	_id: staticCategoryId.toString(),
-	title: 'Restaurants',
-	imageURL: '/images/restaurants-large.jpeg',
-	amount: 300.00
-});
-staticCategoryId++;
-
-budgeUser.currentRangeExpenses.push({
-	_id: staticExpenseId.toString(),
-	categoryId: '1',
-	amount: 12.34,
-	date: '2018-01-15',
-	description: 'Trader Joe\'s Groceries'
-});
-staticExpenseId++;
-
-budgeUser.currentRangeExpenses.push({
-	_id: staticExpenseId.toString(),
-	categoryId: '1',
-	amount: 56.78,
-	date: '2018-01-18',
-	description: 'HEB Groceries'
-});
-staticExpenseId++;
-
-budgeUser.currentRangeExpenses.push({
-	_id: staticExpenseId.toString(),
-	categoryId: '1',
-	amount: 90.12,
-	date: '2018-01-25',
-	description: 'Target Beer Run'
-});
-staticExpenseId++;
-
-budgeUser.currentRangeExpenses.push({
-	_id: staticExpenseId.toString(),
-	categoryId: '2',
-	amount: 78.12,
-	date: '2018-01-27',
-	description: 'Fancy Pants Cuisine'
-});
-staticExpenseId++;
-//////////////////////////////////////////////////////////////////////////////
-
 // DOM Ready ============================================================
 $(document).ready(function() {
-
-	/***************** Uncomment once routes built ****************************
 	// Get budget ranges for current user
 	$.getJSON('/budgetRanges/' + budgeUser.userId, function(data) {
 		budgeUser.budgetRanges = data;
+
+		// Run initial queries for expenses and categories for current range
+		var currentRange = budgeUser.budgetRanges[budgeUser.budgetRanges.length-1];
+
+		// Get expenses
+		$.getJSON('/expenses/' + currentRange._id, function(data) {
+			budgeUser.currentRangeExpenses = data;
+
+			// Get the categories
+			$.getJSON('/categories/' + currentRange._id, function(data) {
+				budgeUser.currentRangeCategories = data;
+
+				// Calculate remaining in each category after retrieving expenses
+				getRemainders();
+
+				// Build initial view
+				buildCategoryView(budgeUser.currentRangeCategories[0]._id);
+			});
+		});
 	});
-
-	// Run initial queries for expenses and categories for current range
-	var currentRange = budgeUser.budgetRanges[budgeUser.budgetRanges.length-1];
-	getExpenses(currentRange._id);
-	getCategories(currentRange._id);
-	***************************************************************************/
-
-	// Calculate remaining in each category after retrieving expenses
-	getRemainders();
-
-	// Build initial view
-	buildCategoryView(budgeUser.currentRangeCategories[0]._id);
 });
 
 // GLOBAL OBJECTS AND FUNCTIONS ========================================
@@ -160,28 +109,6 @@ function BudgeCircle(category, radius) {
 		this.canvas.height = this.radius * 2;
 		this.canvas.style.height = this.canvas.height;
 	}
-}
-
-/************************* FUNCTION: getExpenses *************************
-- Gets expenses from the database based on supplied budgetRange._id and
-  sets global user data variable budgeUser.currentRangeExpenses
-**************************************************************************/
-
-function getExpenses(budgetRangeId) {
-	$.getJSON('/expenses/' + budgetRangeId, function(data) {
-		budgeUser.currentRangeExpenses = data;
-	});
-}
-
-/************************* FUNCTION: getCategories *************************
-- Gets categories from the database based on supplied budgetRange._id and
-  sets global user data variable budgeUser.currentRangeCategories
-**************************************************************************/
-
-function getCategories(budgetRangeId) {
-	$.getJSON('/categories/' + budgetRangeId, function(data) {
-		budgeUser.currentRangeCategories = data;
-	});
 }
 
 /************************* FUNCTION: getCategories *************************

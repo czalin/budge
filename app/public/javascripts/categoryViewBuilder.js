@@ -19,20 +19,6 @@ function buildCategoryView(currentCategoryId) {
 	// Update the background image based on the current category
 	$('body').css('background-image', 'url(' + currentCategory.imageURL + ')');
 
-	// Initialize the view type
-	/*
-	var isLandscape = true;
-	var catCircle;
-	if($(window).width() > $(window).height()) {
-		catCircle = new BudgeCircle(currentCategory, $(window).width()/7);
-		renderLandscape();
-	} else {
-		catCircle = new BudgeCircle(currentCategory, $(window).height()/4);
-		renderPortrait();
-		isLandscape = false;
-	}
-	*/
-
 	// Create the base table for the view
 	var categoryViewTable = document.createElement('table');
 	categoryViewTable.insertRow(0).id = 'categoryViewRow';
@@ -134,7 +120,7 @@ function buildCategoryView(currentCategoryId) {
 		$.each(budgeUser.currentRangeExpenses, function(index, expense) {
 			if(expense.categoryId === currentCategory._id) {
 				expenseRows += '<tr class="expenseRow" data-id=' + expense._id + '>' + 
-							       '<td style="width: 20%">' + expense.date + '</td>' + 
+							       '<td style="width: 20%">' + expense.date.split('T')[0] + '</td>' + 
 							       '<td style="width: 60%">' + expense.description + '</td>' + 
 							       '<td style="width: 20%">$' + parseFloat(expense.amount).toFixed(2) + '</td>' + 
 							    '</tr>';

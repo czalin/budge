@@ -1,36 +1,34 @@
 Database Schema:
 
-User = {
-	_id: hash,
-	name: "string",
-	email: "string",
-	password: hash,
-	budgetId: hash
-}
-
-Budget = {
-	_id: hash,
-	budgetRangeIds: [hashes]
-}
-
-Category = {
-	_id: hash,
-	title: "string",
-	imageURL: "string",
-	amount: double
-}
-
-BudgetRange = {
-	_id: hash,
-	categoryIds: [hash],
-	startDate: date,
-	endDate: date
-}
-
-Expense = {
-	_id: hash,
-	categoryId: hash,
-	amount: double,
-	date: date,
-	description: "string"
-}
+			 budgets = {
+		 		 _id: hash
+			 }
+		/					\
+	   /					 \
+	  /					  	  \
+users = {					budgetRanges = {
+	_id: hash,					_id: hash,
+	budgetIds: [hash],			budgetId: hash,
+	name: "string",				startDate: date,
+	email: "string",			endDate: date
+	password: hash			}			
+}										|
+										|
+										|
+								categories = {
+									_id: hash,
+									budgetRangeId = hash,
+									title: "string",
+									imageURL: "string",
+									amount: double
+								}
+										|
+										|
+										|
+								expenses = {
+									_id: hash,
+									categoryId: hash,
+									amount: double,
+									date: date,
+									description: "string"
+								}

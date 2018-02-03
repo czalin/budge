@@ -138,7 +138,7 @@ function buildExpenseView(expense) {
 			expense.date = $('#expenseForm [name="date"]').val();
 			expense.description = makeSafe($('#expenseForm [name="description"]').val());
 
-			/************** UNCOMMENT AFTER ROUTES BUILT **********************
+			/************** UNCOMMENT AFTER ROUTES BUILT **********************/
 			// Push to database and retrieve the new id
 			$.ajax({
 				type: 'POST',
@@ -159,9 +159,9 @@ function buildExpenseView(expense) {
 				buildCategoryView.updateExpenseTableCell();
 				buildCategoryView.updateVisualizerCell();
 			});
-			******************************************************************/
+			/******************************************************************/
 
-			/********* REMOVE AFTER ROUTES BUILT ***********/
+			/********* REMOVE AFTER ROUTES BUILT ***********
 			// Test add
 			expense._id = staticExpenseId.toString();
 			staticExpenseId++;
