@@ -1,6 +1,6 @@
 // GLOBAL VARIABLES =====================================================
 var budgeUser = {
-	userId: '5a75c943fb31e1c4cfc31592',
+	userId: '5a67f701473517625df4bfda',
 	budgetRanges: [],
 	currentRangeExpenses: [],
 	currentRangeCategories: []
