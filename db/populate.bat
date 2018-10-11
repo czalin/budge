@@ -1,2 +1,0 @@
-mongo populate.js
-
